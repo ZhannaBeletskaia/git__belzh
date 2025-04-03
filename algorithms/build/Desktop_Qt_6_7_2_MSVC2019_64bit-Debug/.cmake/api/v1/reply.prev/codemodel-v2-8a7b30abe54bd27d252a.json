@@ -1,0 +1,79 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-cde4ca35e433eb10ee9b.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "algorithms",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "algorithms::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-algorithms-Debug-80d5733144d63f2ac8c3.json",
+					"name" : "algorithms",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "algorithms_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-algorithms_autogen-Debug-df4201da1180144190ff.json",
+					"name" : "algorithms_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "algorithms_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-algorithms_autogen_timestamp_deps-Debug-1957dfeadf5246839834.json",
+					"name" : "algorithms_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/Zhanna/Documents/algorithms/build/Desktop_Qt_6_7_2_MSVC2019_64bit-Debug",
+		"source" : "C:/Users/Zhanna/Documents/algorithms"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 5
+	}
+}
