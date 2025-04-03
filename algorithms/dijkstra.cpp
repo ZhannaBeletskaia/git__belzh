@@ -74,13 +74,6 @@ void Dijkstra::visualStep()
 
     //логика для весов ребер
 
-    /*str_edge currentEdge = weightsToVisualize.dequeue();
-    emit edgeProcessing(currentEdge.from, currentEdge.to, currentEdge.weight);
-    if(vertexToVisualize.isEmpty())
-        return;
-    int currentVertex = vertexToVisualize.dequeue();
-    emit vertexProcessing(currentVertex, Qt::yellow);*/
-
     auto event = visualizationQueue.dequeue();
     switch(event.type)
     {
