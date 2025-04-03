@@ -21,25 +21,28 @@ public:
 
 signals:
     void vertexProcessing(int &name, QColor color);
-    void edgeProcessing(int &from, int &to, int &weight);
+    void edgeProcessing(int &from, int &to, int &weight, QColor color);
+
     void finished();
 
 private:
     QTimer *m_timer;
     vector<int> distances; // массив кратчайших путей
 
-    struct str_edge
+    enum eventType {VERTEX_EVENT, EDGE_EVENT};
+    struct visualEvent
     {
-        int from;
-        int to;
+        eventType type;
+        int from; // вершина или начало ребра
+        int to; // конец ребра
         int weight;
-        bool isUpdated;
+        QColor color;
     };
 
-    QQueue<str_edge> weightsToVisualize;
-    QQueue<int> vertexToVisualize;
+    QQueue<visualEvent> visualizationQueue;
 
     void startVisualization();
+    void stopVisualization();
     void visualStep();
 
 };

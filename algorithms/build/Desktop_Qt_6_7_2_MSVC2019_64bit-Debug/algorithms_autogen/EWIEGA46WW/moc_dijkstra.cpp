@@ -67,12 +67,12 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSDijkstraENDCLASS[] = {
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
        1,    2,   32,    2, 0x06,    1 /* Public */,
-       6,    3,   37,    2, 0x06,    4 /* Public */,
-      10,    0,   44,    2, 0x06,    8 /* Public */,
+       6,    4,   37,    2, 0x06,    4 /* Public */,
+      10,    0,   46,    2, 0x06,    9 /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3, QMetaType::QColor,    4,    5,
-    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 3, 0x80000000 | 3,    7,    8,    9,
+    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 3, 0x80000000 | 3, QMetaType::QColor,    7,    8,    9,    5,
     QMetaType::Void,
 
        0        // eod
@@ -96,6 +96,7 @@ Q_CONSTINIT const QMetaObject Dijkstra::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<int &, std::false_type>,
         QtPrivate::TypeAndForceComplete<int &, std::false_type>,
         QtPrivate::TypeAndForceComplete<int &, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QColor, std::false_type>,
         // method 'finished'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
@@ -109,7 +110,7 @@ void Dijkstra::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         (void)_t;
         switch (_id) {
         case 0: _t->vertexProcessing((*reinterpret_cast< std::add_pointer_t<int&>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QColor>>(_a[2]))); break;
-        case 1: _t->edgeProcessing((*reinterpret_cast< std::add_pointer_t<int&>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int&>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int&>>(_a[3]))); break;
+        case 1: _t->edgeProcessing((*reinterpret_cast< std::add_pointer_t<int&>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int&>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int&>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<QColor>>(_a[4]))); break;
         case 2: _t->finished(); break;
         default: ;
         }
@@ -123,7 +124,7 @@ void Dijkstra::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
             }
         }
         {
-            using _t = void (Dijkstra::*)(int & , int & , int & );
+            using _t = void (Dijkstra::*)(int & , int & , int & , QColor );
             if (_t _q_method = &Dijkstra::edgeProcessing; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
                 *result = 1;
                 return;
@@ -177,9 +178,9 @@ void Dijkstra::vertexProcessing(int & _t1, QColor _t2)
 }
 
 // SIGNAL 1
-void Dijkstra::edgeProcessing(int & _t1, int & _t2, int & _t3)
+void Dijkstra::edgeProcessing(int & _t1, int & _t2, int & _t3, QColor _t4)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t4))) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 

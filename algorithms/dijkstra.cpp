@@ -18,7 +18,8 @@ void Dijkstra::findShortestPath(vector<vector<pair<int, int> > > &graph, int sta
     {
         int currentDist = pq.top().first; // текущий вес вершины
         int u = pq.top().second; // текущая вершина
-        vertexToVisualize.enqueue(u);
+
+        visualizationQueue.enqueue({VERTEX_EVENT, u, -1, currentDist, Qt::yellow});
         pq.pop();
 
         if(currentDist > distances[u]) continue;
@@ -29,15 +30,13 @@ void Dijkstra::findShortestPath(vector<vector<pair<int, int> > > &graph, int sta
             int weight = edge.second;
             int newDistance = distances[u] + weight;
 
-            weightsToVisualize.enqueue({u, v, distances[v], false});
-
+            visualizationQueue.enqueue({EDGE_EVENT, u, v, newDistance, Qt::red});
             if(newDistance < distances[v])
             {
                 // Обновленное расстояние
-                weightsToVisualize.enqueue({u, v, newDistance, true});
+                visualizationQueue.enqueue({EDGE_EVENT, u, v, newDistance, Qt::green});
                 distances[v] = newDistance;
                 pq.push({distances[v], v});
-
             }
         }
 
@@ -51,11 +50,22 @@ void Dijkstra::startVisualization()
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout, this, &Dijkstra::visualStep);
     m_timer->start(800);
+
+    QTimer::singleShot(0, this, &Dijkstra::visualStep);
+}
+
+void Dijkstra::stopVisualization()
+{
+    if (m_timer && m_timer->isActive()) {
+        m_timer->stop();
+        emit finished();
+        return;
+    }
 }
 
 void Dijkstra::visualStep()
 {
-    if(weightsToVisualize.isEmpty())
+    if(visualizationQueue.isEmpty())
     {
         m_timer->stop();
         emit finished();
@@ -64,13 +74,25 @@ void Dijkstra::visualStep()
 
     //логика для весов ребер
 
-    str_edge currentEdge = weightsToVisualize.dequeue();
+    /*str_edge currentEdge = weightsToVisualize.dequeue();
     emit edgeProcessing(currentEdge.from, currentEdge.to, currentEdge.weight);
-
     if(vertexToVisualize.isEmpty())
         return;
-
     int currentVertex = vertexToVisualize.dequeue();
-    emit vertexProcessing(currentVertex, Qt::yellow);
+    emit vertexProcessing(currentVertex, Qt::yellow);*/
 
+    auto event = visualizationQueue.dequeue();
+    switch(event.type)
+    {
+        case VERTEX_EVENT:
+        {
+            emit vertexProcessing(event.from, event.color);
+            break;
+        }
+        case EDGE_EVENT:
+        {
+            emit edgeProcessing(event.from, event.to, event.weight, event.color);
+            break;
+        }
+    }
 }

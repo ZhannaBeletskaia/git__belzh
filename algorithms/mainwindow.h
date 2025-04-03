@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <qgraphicsscene.h>
 #include <QGraphicsTextItem>
+#include <QFont>
 #include "dijkstra.h"
 
 QT_BEGIN_NAMESPACE
@@ -25,7 +26,9 @@ private slots:
 
     void on_startBtn_clicked();
     void onVertexProcessing(int &name, QColor color);
-    void onEdgeProcessing(int &from, int &to, int &weight);
+    void onEdgeProcessing(int &from, int &to, int &weight, QColor color);
+    void on_addWeightsBtn_clicked();
+    void on_stopBtn_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -35,7 +38,8 @@ private:
     QMap<int, QGraphicsEllipseItem*> m_vertices; // хранить вершины
     QMap<QPair<int, int>, QGraphicsTextItem*> m_edges; // хранить ребра
     void addVertex(qreal x, qreal y, const int &w);
-    void addEdge(qreal x1, qreal y1, qreal x2, qreal y2, const int& from, const int& to);
+    void addEdge(qreal x1, qreal y1, qreal x2, qreal y2, const int& from, const int& to, int weight);
+    void buildEdges();
 
 
 };
