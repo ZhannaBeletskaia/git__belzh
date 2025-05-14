@@ -28,11 +28,11 @@ void ATank::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    if(PlayerControllerRef) // если сущ-ет контроллер, получим результат hitresult под курсором мыши 
+    if(TankPlayerController) // если сущ-ет контроллер, получим результат hitresult под курсором мыши 
     {
         FHitResult hitResult; // хранить результат
         // параметры: выбор канала коллизии, tracecomplex и результат hitа
-        PlayerControllerRef->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, hitResult);
+        TankPlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, hitResult);
         
         DrawDebugSphere(GetWorld(), hitResult.ImpactPoint, 30.f, 12, FColor::Red, false);
         RotateTurret(hitResult.ImpactPoint);
@@ -44,7 +44,7 @@ void ATank::BeginPlay()
 {
     Super::BeginPlay();
     
-    PlayerControllerRef = Cast<APlayerController>(GetController());
+    TankPlayerController = Cast<APlayerController>(GetController());
 }
 
 void ATank::Move(float Value)
@@ -60,4 +60,13 @@ void ATank::Turn(float value)
     FRotator deltaRotation = FRotator::ZeroRotator;
     deltaRotation.Yaw = value * TurnRate * UGameplayStatics::GetWorldDeltaSeconds(this);
     AddActorLocalRotation(deltaRotation, true);
+}
+
+void ATank::HandleDestruction()
+{
+    Super::HandleDestruction();
+    SetActorHiddenInGame(true);
+    SetActorTickEnabled(false);
+
+
 }

@@ -34,6 +34,6 @@ private:
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpalse, const FHitResult& Hit);
 
 	UPROPERTY(EditAnywhere)
-	float Damage = 50.f;
+	float Damage = 20.f;
 
 };
