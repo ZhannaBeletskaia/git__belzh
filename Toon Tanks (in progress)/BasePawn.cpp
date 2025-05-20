@@ -4,6 +4,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Projectile.h"
+#include "Particles/ParticleSystemComponent.h"
 
 
 // Sets default values
@@ -28,6 +29,16 @@ ABasePawn::ABasePawn()
 void ABasePawn::HandleDestruction()
 {
 	//TODO: Visual/Sound effects
+
+	if(DeathParticle)
+		UGameplayStatics::SpawnEmitterAtLocation(this, DeathParticle, GetActorLocation(), GetActorRotation());
+	if(DeathSound)
+			UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation());
+	if(DeathCameraShakeClass)
+	{
+		if (APlayerCameraManager* CameraManager = GetWorld()->GetFirstPlayerController()->PlayerCameraManager)
+        		CameraManager->StartCameraShake(DeathCameraShakeClass);
+	}
 	
 }
 

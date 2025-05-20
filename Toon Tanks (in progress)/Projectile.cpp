@@ -6,6 +6,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "GameFramework/DamageType.h"
 #include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -20,6 +21,9 @@ AProjectile::AProjectile()
 	ProjectileMovementComponent->InitialSpeed = 1300.f;
 	ProjectileMovementComponent->MaxSpeed = 1300.f;
 
+	TrailParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particle Trail"));
+	TrailParticle->SetupAttachment(RootComponent);
+
 }
 
 // Called when the game starts or when spawned
@@ -28,6 +32,9 @@ void AProjectile::BeginPlay()
 	Super::BeginPlay();
 
 	ProjectileMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
+
+	if(LaunchSound)
+		UGameplayStatics::PlaySoundAtLocation(this, LaunchSound, GetActorLocation());
 	
 }
 
@@ -41,7 +48,11 @@ void AProjectile::Tick(float DeltaTime)
 void AProjectile::OnHit(UPrimitiveComponent *HitComp, AActor *OtherActor, UPrimitiveComponent *OtherComp, FVector NormalImpalse, const FHitResult& Hit)
 {
 	auto MyOwner = GetOwner(); // tank or turret pawn
-	if (MyOwner == nullptr) return;
+	if (MyOwner == nullptr) 
+	{
+		Destroy();
+		return;
+	}
 
 	auto MyOwnerInstigator = MyOwner->GetInstigatorController();
 	auto DamageTypeClass = UDamageType::StaticClass(); // вернет uclass
@@ -49,6 +60,18 @@ void AProjectile::OnHit(UPrimitiveComponent *HitComp, AActor *OtherActor, UPrimi
 	if(OtherActor && OtherActor != this && OtherActor != MyOwner)
 	{
 		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwnerInstigator, this, DamageTypeClass);
-		Destroy();
+		if(HitParticle)
+			UGameplayStatics::SpawnEmitterAtLocation(this, HitParticle, GetActorLocation(), GetActorRotation());
+		if(HitSound)
+			UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
+		if(HitCameraShakeClass)
+		{
+			if (APlayerCameraManager* CameraManager = GetWorld()->GetFirstPlayerController()->PlayerCameraManager)
+        		CameraManager->StartCameraShake(HitCameraShakeClass);
+		}
 	}
+
+	Destroy();
+
+	
 }

@@ -34,7 +34,7 @@ void ATank::Tick(float DeltaTime)
         // параметры: выбор канала коллизии, tracecomplex и результат hitа
         TankPlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, hitResult);
         
-        DrawDebugSphere(GetWorld(), hitResult.ImpactPoint, 30.f, 12, FColor::Red, false);
+       // DrawDebugSphere(GetWorld(), hitResult.ImpactPoint, 30.f, 12, FColor::Red, false);
         RotateTurret(hitResult.ImpactPoint);
     }
 
@@ -67,6 +67,6 @@ void ATank::HandleDestruction()
     Super::HandleDestruction();
     SetActorHiddenInGame(true);
     SetActorTickEnabled(false);
-
+    bAlive = false;
 
 }
