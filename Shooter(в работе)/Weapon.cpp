@@ -24,38 +24,25 @@ AWeapon::AWeapon()
 void AWeapon::PullTrigger()
 {
 	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
-
-	// получим owner оружия, чтоб получить его controller
-	APawn* GunOwner = Cast<APawn>(GetOwner());
-	if(GunOwner == nullptr) return;
-
-	AController* OwnerController = GunOwner->GetController();
-	if(OwnerController == nullptr) return;
-
-	FVector location;
-	FRotator rotation;
-
-	OwnerController->GetPlayerViewPoint(location, rotation);
-
-	FVector End = location + rotation.Vector() * MaxRange;
+	UGameplayStatics::SpawnSoundAttached(MuzzleSound, Mesh, TEXT("MuzzleFlashSocket"));
 
 	FHitResult HitResult;
-
-	bool bSuccess = GetWorld()->LineTraceSingleByChannel(HitResult, location, End, ECollisionChannel::ECC_GameTraceChannel1);
+	FVector ShootingFrom;
 	
-
+	bool bSuccess = GunTrace(HitResult, ShootingFrom);
+	
 	if(bSuccess)
 		{
-			FVector ShootingFrom = -rotation.Vector(); // направление от точки попадания к игроку, не самый точный способ
 			//DrawDebugPoint(GetWorld(), HitResult.Location, 20, FColor::Red, true);
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, HitResult.Location, ShootingFrom.Rotation());
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), ImpactSound, HitResult.Location);
 
 			AActor* HitActor = HitResult.GetActor();
 
 			if(HitActor != nullptr)
 			{
 				FPointDamageEvent DamageEvent(Damage, HitResult, ShootingFrom, nullptr);
-				HitActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
+				HitActor->TakeDamage(Damage, DamageEvent, GetOwnerController(), this);
 			}
 		}
 
@@ -78,3 +65,32 @@ void AWeapon::Tick(float DeltaTime)
 
 }
 
+bool AWeapon::GunTrace(FHitResult &HitResult, FVector &ShootingFrom)
+{
+	AController* OwnerController = GetOwnerController();
+	if(!OwnerController) return false;
+
+	FVector location;
+	FRotator rotation;
+
+	OwnerController->GetPlayerViewPoint(location, rotation);
+	ShootingFrom = -rotation.Vector(); // направление от точки попадания к игроку, не самый точный способ
+
+	FVector End = location + rotation.Vector() * MaxRange;
+
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	Params.AddIgnoredActor(GetOwner());
+
+	return GetWorld()->LineTraceSingleByChannel(HitResult, location, End, ECollisionChannel::ECC_GameTraceChannel1, Params);
+
+}
+
+AController *AWeapon::GetOwnerController() const
+{
+  	// получим owner оружия, чтоб получить его controller
+	APawn* GunOwner = Cast<APawn>(GetOwner());
+	if(!GunOwner) return nullptr;
+
+	return GunOwner->GetController();
+}
